@@ -20,17 +20,17 @@ export const getDashboardStats = createAsyncThunk(
       }, {});
 
       const priceRanges = {
-        "0-50": 0,
-        "51-100": 0,
-        "101-200": 0,
-        "201+": 0,
+        "0-1k": 0,
+        "1k-10k": 0,
+        "10k-50k": 0,
+        "50k+": 0,
       };
       products.forEach((p) => {
         const price = Number(p.price);
-        if (price <= 50) priceRanges["0-50"]++;
-        else if (price <= 100) priceRanges["51-100"]++;
-        else if (price <= 200) priceRanges["101-200"]++;
-        else priceRanges["201+"]++;
+        if (price <= 1000) priceRanges["0-1k"]++;
+        else if (price <= 10000) priceRanges["1k-10k"]++;
+        else if (price <= 50000) priceRanges["10k-50k"]++;
+        else priceRanges["50k+"]++;
       });
 
       return {

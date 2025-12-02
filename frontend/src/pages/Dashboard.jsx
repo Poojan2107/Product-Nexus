@@ -45,13 +45,24 @@ export default function Dashboard() {
 
   const { totalProducts, totalValue, avgPrice, categoryCounts, priceRanges, products } = stats;
 
+  const monochromeColors = [
+    "#ffffff", // White
+    "#d4d4d4", // Light Gray
+    "#a3a3a3", // Medium Gray
+    "#737373", // Dark Gray
+    "#525252", // Darker Gray
+    "#262626"  // Almost Black
+  ];
+
   const categoryData = {
     labels: Object.keys(categoryCounts),
     datasets: [
       {
         label: "Products per Category",
         data: Object.values(categoryCounts),
-        backgroundColor: ["#ff6384", "#36a2eb", "#cc65fe", "#ffce56", "#4bc0c0", "#9966ff"],
+        backgroundColor: monochromeColors,
+        borderColor: "#000000",
+        borderWidth: 1,
       },
     ],
   };
@@ -62,7 +73,9 @@ export default function Dashboard() {
       {
         label: "Products in Price Range",
         data: Object.values(priceRanges),
-        backgroundColor: "#36a2eb",
+        backgroundColor: "#d4d4d4",
+        borderColor: "#ffffff",
+        borderWidth: 1,
       },
     ],
   };
@@ -73,23 +86,16 @@ export default function Dashboard() {
       {
         label: "Product Prices",
         data: products.map((p) => Number(p.price)),
-        borderColor: "#ff6384",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "#ffffff",
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        borderWidth: 2,
+        pointBackgroundColor: "#ffffff",
       },
     ],
   };
 
   return (
     <div className="container">
-      {/* Active filters summary */}
-      <div className="terminal" style={{ marginBottom: "1rem", padding: "0.75rem" }}>
-        <div>FILTERS: {[
-          filters.search ? `search="${filters.search}"` : null,
-          filters.minPrice ? `min=${filters.minPrice}` : null,
-          filters.maxPrice ? `max=${filters.maxPrice}` : null,
-          filters.sortBy ? `sort=${filters.sortBy}` : null,
-        ].filter(Boolean).join(" | ") || 'none'}</div>
-      </div>
       <h2 className="page-title">ANALYTICS_DASHBOARD.exe</h2>
       <div className="stats" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem", marginBottom: "2rem", width: "100%" }}>
         <div className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
