@@ -46,12 +46,12 @@ export default function Dashboard() {
   const { totalProducts, totalValue, avgPrice, categoryCounts, priceRanges, products } = stats;
 
   const monochromeColors = [
-    "#ffffff", // White
-    "#d4d4d4", // Light Gray
-    "#a3a3a3", // Medium Gray
-    "#737373", // Dark Gray
-    "#525252", // Darker Gray
-    "#262626"  // Almost Black
+    "rgba(255, 255, 255, 1.0)",  // Solid White
+    "rgba(255, 255, 255, 0.8)",  // 80% White
+    "rgba(255, 255, 255, 0.6)",  // 60% White
+    "rgba(255, 255, 255, 0.4)",  // 40% White
+    "rgba(255, 255, 255, 0.2)",  // 20% White
+    "transparent"                // Wireframe (Border only)
   ];
 
   const categoryData = {
@@ -61,7 +61,7 @@ export default function Dashboard() {
         label: "Products per Category",
         data: Object.values(categoryCounts),
         backgroundColor: monochromeColors,
-        borderColor: "#000000",
+        borderColor: "#ffffff",
         borderWidth: 1,
       },
     ],
