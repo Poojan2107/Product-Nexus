@@ -1,0 +1,169 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 2px solid #ffffff;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+}
+
+.navbar__inner {
+  width: 100%;
+  margin: 0;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 20px #ffffff;
+  transition: all 0.3s ease;
+}
+
+.brand:hover {
+  color: #cccccc;
+  text-shadow: 0 0 30px #cccccc;
+  transform: scale(1.05);
+}
+
+.navlinks {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* Maximum specificity for navbar links */
+.navbar .navbar__inner .navlinks a,
+.navbar .navlinks a,
+.navlinks a {
+  color: #ffffff !important;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: 8px !important;
+  border: 2px solid #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  font-family: var(--font-mono) !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  min-width: 120px !important;
+  text-align: center !important;
+  z-index: 10 !important;
+}
+
+/* Hover state with maximum specificity */
+.navbar .navbar__inner .navlinks a:hover,
+.navbar .navlinks a:hover,
+.navlinks a:hover {
+  color: #000000 !important;
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3) !important;
+  text-shadow: none !important;
+}
+
+/* Active state with maximum specificity */
+.navbar .navbar__inner .navlinks a.active,
+.navbar .navlinks a.active,
+.navlinks a.active {
+  color: #000000 !important;
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
+  text-shadow: none !important;
+}
+
+.authbox {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.welcome {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navbar__inner {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .navlinks {
+    gap: 1rem;
+  }
+
+  .authbox {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Glitch effect for brand */
+.brand:hover {
+  animation: glitch 0.3s ease-in-out infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0) scale(1.05);
+  }
+  20% {
+    transform: translate(-2px, 2px) scale(1.05);
+  }
+  40% {
+    transform: translate(-2px, -2px) scale(1.05);
+  }
+  60% {
+    transform: translate(2px, 2px) scale(1.05);
+  }
+  80% {
+    transform: translate(2px, -2px) scale(1.05);
+  }
+  100% {
+    transform: translate(0) scale(1.05);
+  }
+}
+
+/* New navbar button styling with proper states */
+.nav-inactive:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.nav-active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Ensure all navbar links are visible */
+.navlinks a {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
