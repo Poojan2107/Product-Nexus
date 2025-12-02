@@ -75,10 +75,9 @@ mongoose.connect(mongoUrl)
       res.status(500).json({ message: 'Something went wrong!', error: err.message });
     });
 
-    // Start server on localhost
-    const HOST = process.env.HOST || 'localhost';
-    app.listen(PORT, HOST, () => {
-      console.log(`Backend:  http://${HOST}:${PORT}`);
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`Backend running on port ${PORT}`);
     });
   })
   .catch(err => {
