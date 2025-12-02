@@ -1,168 +1,145 @@
-# Product Nexus 🚀
+# ProductNexus 🚀
 
-**Where Products Meet Perfection**
+**The Commander's Console for Inventory Management**
 
-A modern, terminal-inspired product management application built with the MERN stack. Product Nexus provides a sleek, dark-themed interface for managing your product catalog with full CRUD operations and JWT-based user authentication.
+![ProductNexus Banner](https://via.placeholder.com/1200x400/000000/ffffff?text=ProductNexus+Command+Center)
 
-## 🌟 Features
+> A futuristic, terminal-inspired full-stack application built with the MERN stack. ProductNexus combines raw power with a "Techy Black & White" aesthetic, featuring a global command terminal, holographic analytics, and fluid animations.
 
-- **🔐 User Authentication**: Secure login and registration using JWT tokens
-- **📦 Product Management**: Complete CRUD operations (Create, Read, Update, Delete)
-- **📊 Analytics Dashboard**: Visual insights with interactive charts (Chart.js)
-- **🔍 Advanced Search & Filter**: Global search, price range filtering, and sorting
-- **📄 PDF Export**: Download product lists as professional PDF reports
-- **🖼️ Cloud Image Storage**: Real image uploads via Cloudinary with Drag-and-Drop support
-- **⚡ Optimistic UI**: Instant interface updates for a snappy user experience
-- **🔄 Pagination**: Server-side pagination for handling large datasets
-- **🎨 Terminal-Inspired UI**: Modern dark theme with techy aesthetics and Skeleton loading
-- **💻 Interactive CLI**: Built-in terminal widget for command-line navigation
-- **🎬 Creative Landing Page**: Typewriter effects, 3D tilt cards, and parallax animations
-- **📱 Responsive Design**: Works seamlessly across desktop and mobile devices
+[![Vercel App](https://therealsujitk-vercel-badge.vercel.app/?app=product-nexus-poojan)](https://product-nexus-poojan.vercel.app/)
+[![Render Status](https://img.shields.io/badge/Backend-Render-black?style=flat&logo=render)](https://product-nexus.onrender.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-white.svg)](https://opensource.org/licenses/MIT)
+
+---
+
+## 🔗 Live Deployment
+
+- **Frontend (Vercel):** [https://product-nexus-poojan.vercel.app/](https://product-nexus-poojan.vercel.app/)
+- **Backend (Render):** [https://product-nexus.onrender.com](https://product-nexus.onrender.com)
+
+---
+
+## 🌟 Key Features
+
+### 🖥️ The Command Center Experience
+- **Global Command Terminal (CLI)**: Press `Ctrl+K` anywhere to open a fully functional terminal. Navigate pages, export reports, or search products using keyboard commands.
+- **Monochrome Aesthetic**: A strict "Techy Black & White" design system with holographic opacity layers for a premium, sci-fi feel.
+- **Fluid Animations**: Powered by **Framer Motion**, the interface features staggered entry animations, smooth layout transitions, and spring physics.
+
+### 📊 Advanced Analytics
+- **Holographic Charts**: Real-time visualization of inventory distribution and value using custom Chart.js configurations.
+- **Live Data**: Instant updates on total asset value, category breakdowns, and price trends.
+
+### 🛠️ Powerful Management
+- **Smart Inventory**: Create, Edit, and Delete products with optimistic UI updates (instant feedback).
+- **Cloud Storage**: Integrated **Cloudinary** support for drag-and-drop image uploads.
+- **PDF Reporting**: One-click generation of professional inventory reports using `jspdf`.
+- **Secure Auth**: Robust JWT-based authentication with protected routes and persistent sessions.
+
+---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 19+** with Vite
-- **Redux Toolkit** for global state management
-- **Chart.js** for data visualization
-- **React Dropzone** for drag-and-drop file uploads
-- **jsPDF** for document generation
-- **React Loading Skeleton** for loading states
-- **CSS3** with custom dark theme and animations
+- **Framework**: React 18 (Vite)
+- **State Management**: Redux Toolkit
+- **Styling**: Vanilla CSS (Custom Variables), Framer Motion
+- **Visualization**: Chart.js, React-Chartjs-2
+- **Utilities**: React Router DOM, Axios, React Dropzone
 
 ### Backend
-- **Node.js** with Express.js
-- **MongoDB** with Mongoose ODM
-- **Cloudinary** for image storage
-- **Multer** for file handling
-- **JWT** for authentication
-- **bcryptjs** for password hashing
-- **CORS** for cross-origin requests
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB Atlas (Mongoose ODM)
+- **Storage**: Cloudinary (Multer)
+- **Security**: JWT, Bcrypt, CORS, Helmet
 
-### Deployment
-- **GitHub Pages** for frontend deployment
-- **MongoDB Atlas** for cloud database
-- **Git** for version control
+### DevOps
+- **Frontend Hosting**: Vercel
+- **Backend Hosting**: Render
+- **Version Control**: Git & GitHub
 
-## 🚀 Live Demo
+---
 
-**[Visit Product Nexus](https://poojan2107.github.io/ProductNexus)**
+## 📸 Screenshots
 
-## 📋 Product Features
+| Dashboard | Command Terminal |
+|-----------|------------------|
+| ![Dashboard](https://via.placeholder.com/400x300/111111/ffffff?text=Dashboard) | ![Terminal](https://via.placeholder.com/400x300/111111/ffffff?text=CLI+Terminal) |
 
-### Product Management
+| Product List | Add Product |
+|--------------|-------------|
+| ![List](https://via.placeholder.com/400x300/111111/ffffff?text=Product+List) | ![Add](https://via.placeholder.com/400x300/111111/ffffff?text=Add+Product) |
 
-- ➕ **Add Products**: Create new products with drag-and-drop image upload
-- 👁️ **View Products**: Browse products with server-side pagination
-- ✏️ **Edit Products**: Update existing product details and images
-- 🗑️ **Delete Products**: Remove products with optimistic UI updates
-- 🔍 **Search & Filter**: Real-time filtering by name, category, and price
-- 📄 **Export Data**: Generate PDF reports of your inventory
-- 📊 **Dashboard**: View total value, category distribution, and price trends
+---
 
-### User Experience
-
-- 🔑 **Secure Authentication**: Register new accounts or login to existing ones
-- 🛡️ **Protected Routes**: Only authenticated users can access product management
-- 📱 **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- ⚡ **Real-time Updates**: Instant UI updates after operations
-- 🎨 **Dark Theme**: Terminal-inspired aesthetic with smooth animations
-
-## 🏗️ Project Structure
-
-```
-product/
-├── backend/                    # Express.js backend
-│   ├── models/                 # MongoDB models
-│   ├── routes/                 # API routes
-│   ├── middleware/             # Custom middleware
-│   │   └── upload.js          # Multer/Cloudinary config
-│   └── server.js              # Main server file
-├── src/                       # React frontend
-│   ├── components/            # Reusable UI components
-│   ├── pages/                 # Main application pages
-│   ├── services/              # API services
-│   ├── store/                 # Redux store and slices
-│   │   ├── productSlice.js    # Product state management
-│   │   └── dashboardSlice.js  # Analytics state management
-│   ├── hooks/                 # Custom React hooks
-│   └── styles/                # CSS styling files
-└── README.md                  # Project documentation
-- MongoDB Atlas account (or local MongoDB)
-- Git
-
-### Installation
+## 🚀 Local Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Poojan2107/ProductNexus.git
-   cd ProductNexus
+   git clone https://github.com/Poojan2107/Product-Nexus.git
+   cd Product-Nexus
    ```
 
-2. **Install frontend dependencies**
+2. **Install Dependencies**
    ```bash
+   # Install Frontend
+   cd frontend
+   npm install
+
+   # Install Backend
+   cd ../backend
    npm install
    ```
 
-3. **Install backend dependencies**
-   ```bash
-   cd backend
-   npm install
-   cd ..
-   ```
-
-4. **Set up environment variables**
-
-   Create a `.env` file in the `backend` directory:
+3. **Environment Setup**
+   Create a `.env` file in `backend/`:
    ```env
    PORT=5000
-   MONGODB_URL=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret_key
+   MONGODB_URL=your_mongodb_uri
+   JWT_SECRET=your_secret_key
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
+   CLIENT_URL=http://localhost:5173
    ```
 
-5. **Start the backend server**
+   Create a `.env` file in `frontend/`:
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   ```
+
+4. **Run Locally**
    ```bash
+   # Terminal 1: Backend
    cd backend
    npm run dev
-   ```
 
-6. **Start the frontend development server**
-   ```bash
-   # In a new terminal, from the root directory
+   # Terminal 2: Frontend
+   cd frontend
    npm run dev
    ```
 
-7. **Open your browser**
-
-   Navigate to `http://localhost:5173` to access the application.
+---
 
 ## 📡 API Endpoints
 
-### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/logout` - Logout user
-- `GET /api/auth/status` - Check auth status
-  - `PUT /api/auth/update/:id` - Update user profile
-
-### Products
-- `GET /api/products` - Get all products for authenticated user
-- `GET /api/products/:id` - Get single product
-- `POST /api/products` - Create new product
-- `PUT /api/products/:id` - Update product
-- `DELETE /api/products/:id` - Delete product
-
-## 👨‍💻 Developer
-
-**Product Management App Built By Poojan Shrivastav.**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login & get token |
+| GET | `/api/products` | Fetch all products (paginated) |
+| POST | `/api/products` | Create new product (w/ image) |
+| DELETE | `/api/products/:id` | Delete product |
 
 ---
 
-### 🔗 Links
+## 👨‍💻 Author
 
-- **Live Demo**: https://poojan2107.github.io/ProductNexus
-- **Repository**: https://github.com/Poojan2107/ProductNexus
+**Poojan Shrivastav**
+- [LinkedIn](https://linkedin.com/in/poojan-shrivastav)
+- [GitHub](https://github.com/Poojan2107)
 
 ---
 
-_Built with ❤️ using the MERN stack and modern web technologies._
+_Built with 🖤 and Code._
