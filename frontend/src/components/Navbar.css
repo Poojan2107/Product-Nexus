@@ -17,6 +17,22 @@
   justify-content: space-between;
 }
 
+.navbar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+}
+
+.navbar__content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  justify-content: space-between;
+  margin-left: 2rem;
+}
+
 .brand {
   font-family: var(--font-mono);
   font-weight: 800;
@@ -26,6 +42,7 @@
   letter-spacing: 3px;
   text-shadow: 0 0 20px #ffffff;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .brand:hover {
@@ -40,10 +57,8 @@
   align-items: center;
 }
 
-/* Maximum specificity for navbar links */
-.navbar .navbar__inner .navlinks a,
-.navbar .navlinks a,
-.navlinks a {
+/* Navbar Links Styling */
+.navbar .navlinks a {
   color: #ffffff !important;
   padding: 0.75rem 1.25rem !important;
   border-radius: 8px !important;
@@ -59,36 +74,21 @@
   align-items: center !important;
   justify-content: center !important;
   transition: all 0.3s ease !important;
-  position: relative !important;
-  overflow: hidden !important;
-  opacity: 1 !important;
-  visibility: visible !important;
   min-width: 120px !important;
   text-align: center !important;
-  z-index: 10 !important;
 }
 
-/* Hover state with maximum specificity */
-.navbar .navbar__inner .navlinks a:hover,
-.navbar .navlinks a:hover,
-.navlinks a:hover {
+.navbar .navlinks a:hover {
   color: #000000 !important;
   background: #ffffff !important;
-  border-color: #ffffff !important;
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3) !important;
-  text-shadow: none !important;
 }
 
-/* Active state with maximum specificity */
-.navbar .navbar__inner .navlinks a.active,
-.navbar .navlinks a.active,
-.navlinks a.active {
+.navbar .navlinks a.nav-active {
   color: #000000 !important;
   background: #ffffff !important;
-  border-color: #ffffff !important;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
-  text-shadow: none !important;
 }
 
 .authbox {
@@ -103,67 +103,86 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  white-space: nowrap;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 1024px) {
   .navbar__inner {
     flex-direction: column;
-    gap: 1rem;
+    align-items: stretch;
     padding: 1rem;
   }
 
+  .navbar__header {
+    width: 100%;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .navbar__content {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding-top: 1rem;
+    gap: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 1rem;
+  }
+
+  .navbar__content.open {
+    display: flex;
+    animation: slideDown 0.3s ease-out;
+  }
+
   .navlinks {
+    flex-direction: column;
+    width: 100%;
     gap: 1rem;
+  }
+
+  .navbar .navlinks a {
+    width: 100% !important;
   }
 
   .authbox {
     flex-direction: column;
-    gap: 0.5rem;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .welcome {
+    text-align: center;
+  }
+
+  .authbox .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
-/* Glitch effect for brand */
-.brand:hover {
-  animation: glitch 0.3s ease-in-out infinite;
-}
-
-@keyframes glitch {
-  0% {
-    transform: translate(0) scale(1.05);
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  20% {
-    transform: translate(-2px, 2px) scale(1.05);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  40% {
-    transform: translate(-2px, -2px) scale(1.05);
-  }
-  60% {
-    transform: translate(2px, 2px) scale(1.05);
-  }
-  80% {
-    transform: translate(2px, -2px) scale(1.05);
-  }
-  100% {
-    transform: translate(0) scale(1.05);
-  }
-}
-
-/* New navbar button styling with proper states */
-.nav-inactive:hover {
-  background: #ffffff !important;
-  color: #000000 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-}
-
-.nav-active:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-}
-
-/* Ensure all navbar links are visible */
-.navlinks a {
-  opacity: 1 !important;
-  visibility: visible !important;
 }

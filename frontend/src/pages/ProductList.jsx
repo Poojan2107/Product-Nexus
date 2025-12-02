@@ -127,9 +127,9 @@ export default function ProductList() {
       transition={{ duration: 0.3 }}
     >
       <div className="control-panel">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+        <div className="control-panel-header">
            {/* Search & Sort */}
-           <div style={{ display: "flex", gap: "1rem", flex: 1, minWidth: "300px" }}>
+           <div className="control-panel-search">
               <input 
                 type="text" 
                 placeholder="🔍 SEARCH_DATABASE..." 
@@ -141,37 +141,34 @@ export default function ProductList() {
               />
            </div>
            {/* Actions */}
-           <div style={{ display: "flex", gap: "1rem" }}>
+           <div className="control-panel-actions">
               <button className="btn muted" onClick={exportPDF}>DOWNLOAD_REPORT</button>
               <Link className="btn accent" to="/products/add">+ NEW_ENTRY</Link>
            </div>
         </div>
 
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
+        <div className="control-panel-filters">
            <span style={{ color: "var(--text-muted)", fontSize: "0.9rem", fontFamily: "var(--font-mono)" }}>FILTERS:</span>
            <input 
              type="number" 
              placeholder="MIN_$$" 
              value={minPrice}
              onChange={(e) => setMinPrice(e.target.value)}
-             className="terminal-input"
-             style={{ width: "120px" }}
+             className="terminal-input filter-input"
            />
-           <span style={{ color: "var(--text-muted)" }}>-</span>
+           <span style={{ color: "var(--text-muted)" }} className="filter-divider">-</span>
            <input 
              type="number" 
              placeholder="MAX_$$" 
              value={maxPrice}
              onChange={(e) => setMaxPrice(e.target.value)}
-             className="terminal-input"
-             style={{ width: "120px" }}
+             className="terminal-input filter-input"
            />
-           <div style={{ width: "1px", height: "24px", background: "var(--border-secondary)", margin: "0 1rem" }}></div>
+           <div className="filter-divider" style={{ width: "1px", height: "24px", background: "var(--border-secondary)", margin: "0 1rem" }}></div>
            <select 
              value={sortBy} 
              onChange={(e) => setSortBy(e.target.value)}
-             className="terminal-input"
-             style={{ width: "220px", cursor: "pointer" }}
+             className="terminal-input sort-select"
            >
              <option value="name">SORT: NAME (A-Z)</option>
              <option value="price-asc">SORT: PRICE (LOW-HIGH)</option>

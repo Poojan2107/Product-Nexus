@@ -127,7 +127,7 @@ export default function Dashboard() {
     >
       <motion.h2 className="page-title" variants={itemVariants}>ANALYTICS_DASHBOARD.exe</motion.h2>
       
-      <motion.div className="stats" variants={containerVariants} style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem", marginBottom: "2rem", width: "100%" }}>
+      <motion.div className="stats stats-grid" variants={containerVariants}>
         <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
           <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>TOTAL_PRODUCTS</h3>
           <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--accent-primary)" }}>{totalProducts}</p>
@@ -142,7 +142,7 @@ export default function Dashboard() {
         </motion.div>
       </motion.div>
 
-      <motion.div className="charts" variants={containerVariants} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", width: "100%", padding: "0 1rem" }}>
+      <motion.div className="charts charts-grid" variants={containerVariants}>
         <motion.div variants={itemVariants} className="chart-card" style={{ padding: "1rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", borderRadius: "16px", boxShadow: "var(--shadow-secondary)", overflow: "hidden" }}>
           <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>PRODUCTS_BY_CATEGORY</h3>
           <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
@@ -155,7 +155,7 @@ export default function Dashboard() {
             <Bar data={priceData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
           </div>
         </motion.div>
-        <motion.div variants={itemVariants} className="chart-card" style={{ padding: "1rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", borderRadius: "16px", boxShadow: "var(--shadow-secondary)", gridColumn: "1 / -1", overflow: "hidden" }}>
+        <motion.div variants={itemVariants} className="chart-card chart-full-width" style={{ padding: "1rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", borderRadius: "16px", boxShadow: "var(--shadow-secondary)", overflow: "hidden" }}>
           <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>PRODUCT_PRICES</h3>
           <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
             <Line data={priceLineData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
