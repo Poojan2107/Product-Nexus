@@ -9,7 +9,7 @@ export default function Profile() {
       <h2 className="terminal-header" style={{ marginBottom: "2rem", textAlign: "center" }}>USER_PROFILE_CONFIG</h2>
       
       <div className="card" style={{ padding: "2rem", display: "grid", gap: "2rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "2rem", borderBottom: "1px solid var(--border-secondary)", paddingBottom: "2rem" }}>
+        <div className="profile-header">
           <div style={{ 
             width: "100px", 
             height: "100px", 
@@ -20,7 +20,8 @@ export default function Profile() {
             justifyContent: "center",
             border: "2px solid var(--accent-primary)",
             fontSize: "2.5rem",
-            color: "var(--accent-primary)"
+            color: "var(--accent-primary)",
+            flexShrink: 0
           }}>
             {user?.name?.charAt(0).toUpperCase() || "U"}
           </div>
@@ -36,17 +37,17 @@ export default function Profile() {
 
         <div style={{ display: "grid", gap: "1rem" }}>
           <h4 style={{ color: "var(--text-muted)", borderBottom: "1px solid var(--border-secondary)", paddingBottom: "0.5rem" }}>ACCOUNT_DETAILS</h4>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1rem", alignItems: "center" }}>
+          <div className="profile-grid">
             <label style={{ color: "var(--text-secondary)" }}>EMAIL_ADDRESS:</label>
-            <input type="text" value={user?.email} disabled className="terminal-input" style={{ opacity: 0.7 }} />
+            <input type="text" value={user?.email} disabled className="terminal-input" style={{ opacity: 0.7, width: "100%" }} />
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1rem", alignItems: "center" }}>
+          <div className="profile-grid">
             <label style={{ color: "var(--text-secondary)" }}>PASSWORD:</label>
-            <input type="password" value="********" disabled className="terminal-input" style={{ opacity: 0.7 }} />
+            <input type="password" value="********" disabled className="terminal-input" style={{ opacity: 0.7, width: "100%" }} />
           </div>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem", marginTop: "1rem" }}>
+        <div className="profile-actions">
            <button className="btn muted" onClick={logout}>TERMINATE_SESSION</button>
            <button className="btn accent">UPDATE_CREDENTIALS</button>
         </div>

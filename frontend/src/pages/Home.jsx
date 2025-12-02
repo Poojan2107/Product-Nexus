@@ -31,13 +31,13 @@ export default function Home() {
 
   if (user) {
     return (
-      <div className="hero-section" onMouseMove={handleMouseMove}>
+      <div className="hero-section" onMouseMove={handleMouseMove} style={{ overflowX: "hidden" }}>
         <ParticleBackground />
         <div className="scanline"></div>
         <div className="vignette"></div>
         
-        <div className="glitch-wrapper" style={{ marginTop: "-5rem" }}>
-          <div className="typing-container" style={{ fontSize: "2.5rem", borderRight: "none", animation: "none" }}>
+        <div className="glitch-wrapper" style={{ marginTop: "-5rem", width: "100%", padding: "0 1rem" }}>
+          <div className="typing-container" style={{ fontSize: "clamp(1.5rem, 4vw, 2.5rem)", borderRight: "none", animation: "none", whiteSpace: "normal", textAlign: "center" }}>
             WELCOME_BACK_COMMANDER
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="dashboard-widgets" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", gap: "2rem", marginTop: "3rem", width: "100%", maxWidth: "1000px", opacity: 0, animation: "fadeInUp 1s ease 0.5s forwards" }}>
+        <div className="dashboard-widgets" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem", marginTop: "3rem", width: "100%", maxWidth: "1000px", padding: "0 1rem", opacity: 0, animation: "fadeInUp 1s ease 0.5s forwards" }}>
           <InventoryAnalyticsPanel products={products} />
           <RecentActivityPanel products={products} />
         </div>
@@ -89,7 +89,7 @@ export default function Home() {
   }
 
   return (
-    <div className="hero-section" onMouseMove={handleMouseMove}>
+    <div className="hero-section" onMouseMove={handleMouseMove} style={{ overflowX: "hidden" }}>
       <div className="scanline"></div>
       <div className="vignette"></div>
       
@@ -98,7 +98,7 @@ export default function Home() {
       <div className="floating-data" style={{ top: '60%', left: '80%', animationDelay: '2s' }}></div>
       <div className="floating-data" style={{ top: '80%', left: '30%', animationDelay: '4s' }}></div>
 
-      <div className="glitch-wrapper">
+      <div className="glitch-wrapper" style={{ width: "100%", padding: "0 1rem", display: "flex", justifyContent: "center" }}>
         <Typewriter 
           phrases={[
             "INITIALIZING_SYSTEM...",
@@ -111,24 +111,25 @@ export default function Home() {
       
       <p style={{ 
         fontFamily: "var(--font-mono)", 
-        fontSize: "1.2rem", 
+        fontSize: "clamp(1rem, 3vw, 1.2rem)", 
         color: "var(--text-secondary)", 
         maxWidth: "600px", 
         marginBottom: "2rem", 
         lineHeight: "1.6",
         opacity: 0,
         animation: "fadeInUp 1s ease 1.5s forwards",
-        transform: `translate(${mousePosition.x * -10}px, ${mousePosition.y * -10}px)`
+        transform: `translate(${mousePosition.x * -10}px, ${mousePosition.y * -10}px)`,
+        padding: "0 1rem"
       }}>
         ADVANCED_INVENTORY_MANAGEMENT_PROTOCOL_V1.0
       </p>
 
-      <div className="cta-buttons" style={{ transform: `translate(${mousePosition.x * -5}px, ${mousePosition.y * -5}px)` }}>
-        <Link to="/login" className="btn accent" style={{ padding: "1rem 3rem", fontSize: "1.2rem", textDecoration: "none", fontWeight: "bold", position: 'relative', overflow: 'hidden' }}>
+      <div className="cta-buttons" style={{ transform: `translate(${mousePosition.x * -5}px, ${mousePosition.y * -5}px)`, flexWrap: "wrap", justifyContent: "center", width: "100%", padding: "0 1rem" }}>
+        <Link to="/login" className="btn accent" style={{ padding: "1rem 3rem", fontSize: "1.2rem", textDecoration: "none", fontWeight: "bold", position: 'relative', overflow: 'hidden', width: "100%", maxWidth: "300px", textAlign: "center" }}>
           <span className="btn-glitch-effect"></span>
           INITIALIZE_LOGIN
         </Link>
-        <Link to="/register" className="btn muted" style={{ padding: "1rem 3rem", fontSize: "1.2rem", textDecoration: "none" }}>
+        <Link to="/register" className="btn muted" style={{ padding: "1rem 3rem", fontSize: "1.2rem", textDecoration: "none", width: "100%", maxWidth: "300px", textAlign: "center" }}>
           NEW_USER_REGISTRATION
         </Link>
       </div>
@@ -139,7 +140,7 @@ export default function Home() {
         <TiltCard title="[ CLOUD_SYNC ]" desc="Seamless asset management with distributed cloud storage integration." delay={0.4} />
       </div>
 
-      <div className="system-modules" style={{ marginTop: "4rem", textAlign: "left", width: "100%", maxWidth: "800px", opacity: 0, animation: "fadeInUp 1s ease 4s forwards" }}>
+      <div className="system-modules" style={{ marginTop: "4rem", textAlign: "left", width: "100%", maxWidth: "800px", padding: "0 1rem", opacity: 0, animation: "fadeInUp 1s ease 4s forwards" }}>
         <h3 style={{ borderBottom: "1px solid var(--border-primary)", paddingBottom: "0.5rem", marginBottom: "1rem", color: "var(--text-muted)" }}>
           {">"} SYSTEM_MODULES_CHECK
         </h3>
@@ -283,7 +284,7 @@ function Typewriter({ phrases }) {
   };
 
   return (
-    <div className="typing-container glitch" data-text={text}>
+    <div className="typing-container glitch" data-text={text} style={{ fontSize: "clamp(1.5rem, 5vw, 3.5rem)", textAlign: "center", whiteSpace: "normal" }}>
       {text}
     </div>
   );
