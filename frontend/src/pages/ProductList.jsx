@@ -11,6 +11,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useNotification } from "../contexts/NotificationContext";
 import * as ReactWindow from 'react-window';
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProductList() {
   const { user, initializing } = useAuth();
@@ -119,7 +120,12 @@ export default function ProductList() {
   if (error) return <div className="container terminal">{error}</div>;
 
   return (
-    <div className="slide-in">
+    <motion.div 
+      className="slide-in"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="control-panel">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
            {/* Search & Sort */}
@@ -205,11 +211,32 @@ export default function ProductList() {
               </ReactWindow.FixedSizeList>
             </div>
           ) : (
-            <div className="card-grid">
-              {products.map((p) => (
-                <ProductItem key={p._id} product={p} onDelete={handleDelete} />
-              ))}
-            </div>
+            <motion.div 
+              className="card-grid"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: { transition: { staggerChildren: 0.05 } }
+              }}
+            >
+              <AnimatePresence mode="popLayout">
+                {products.map((p) => (
+                  <motion.div
+                    key={p._id}
+                    layout
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.8 },
+                      visible: { opacity: 1, scale: 1 }
+                    }}
+                    initial="hidden"
+                    animate="visible"
+                    exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+                  >
+                    <ProductItem product={p} onDelete={handleDelete} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           )}
           <div className="pagination" style={{ display: "flex", justifyContent: "center", gap: "1rem", marginTop: "2rem" }}>
             <button
@@ -232,6 +259,6 @@ export default function ProductList() {
           </div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 }
