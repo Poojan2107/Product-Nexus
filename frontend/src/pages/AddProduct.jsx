@@ -56,7 +56,7 @@ export default function AddProduct() {
     <div className="slide-in" style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
       <h2 className="terminal-header" style={{ marginBottom: "2rem", textAlign: "center" }}>ADD_NEW_PRODUCT</h2>
       <form onSubmit={handleSubmit} className="form-container" style={{ display: "grid", gap: "1.5rem", background: "var(--bg-card)", padding: "2rem", borderRadius: "16px", border: "1px solid var(--border-primary)", boxShadow: "var(--shadow-primary)" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+        <div className="form-grid">
           <div className="form-group">
             <label style={{ display: "block", marginBottom: "0.5rem", color: "var(--text-secondary)", fontSize: "0.9rem", letterSpacing: "1px" }}>PRODUCT_NAME</label>
             <input
@@ -85,7 +85,7 @@ export default function AddProduct() {
           </div>
         </div>
         
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+        <div className="form-grid">
           <div className="form-group">
             <label style={{ display: "block", marginBottom: "0.5rem", color: "var(--text-secondary)", fontSize: "0.9rem", letterSpacing: "1px" }}>CATEGORY</label>
             <input
@@ -169,7 +169,6 @@ export default function AddProduct() {
             fontSize: "1.1rem", 
             fontWeight: "bold", 
             letterSpacing: "1px",
-            // Remove inline background/color to let 'btn accent' class handle it, or force it correctly
             width: "100%"
           }}
         >

@@ -712,6 +712,13 @@ header .navlinks a.active,
   cursor: pointer;
 }
 
+/* Responsive Forms */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
 /* Mobile Media Queries */
 @media (max-width: 1024px) {
   .stats-grid {
@@ -725,6 +732,10 @@ header .navlinks a.active,
 
 @media (max-width: 768px) {
   .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-grid {
     grid-template-columns: 1fr;
   }
   

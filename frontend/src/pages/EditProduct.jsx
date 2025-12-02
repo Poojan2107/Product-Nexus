@@ -87,7 +87,7 @@ export default function EditProduct() {
     <div className="slide-in" style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
       <h2 className="terminal-header" style={{ marginBottom: "2rem", textAlign: "center" }}>EDIT_PRODUCT</h2>
       <form onSubmit={handleSubmit} className="form-container" style={{ display: "grid", gap: "1.5rem", background: "var(--bg-card)", padding: "2rem", borderRadius: "16px", border: "1px solid var(--border-primary)", boxShadow: "var(--shadow-primary)" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+        <div className="form-grid">
           <div className="form-group">
             <label style={{ display: "block", marginBottom: "0.5rem", color: "var(--text-secondary)", fontSize: "0.9rem", letterSpacing: "1px" }}>PRODUCT_NAME</label>
             <input
@@ -116,7 +116,7 @@ export default function EditProduct() {
           </div>
         </div>
         
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+        <div className="form-grid">
           <div className="form-group">
             <label style={{ display: "block", marginBottom: "0.5rem", color: "var(--text-secondary)", fontSize: "0.9rem", letterSpacing: "1px" }}>CATEGORY</label>
             <input
@@ -205,7 +205,8 @@ export default function EditProduct() {
             border: "none",
             borderRadius: "8px",
             cursor: "pointer",
-            transition: "transform 0.2s ease"
+            transition: "transform 0.2s ease",
+            width: "100%"
           }}
           onMouseOver={(e) => e.target.style.transform = "scale(1.02)"}
           onMouseOut={(e) => e.target.style.transform = "scale(1)"}
