@@ -138,3 +138,15 @@ export async function getOrders() {
 export async function getAnalytics() {
   return apiRequest('/orders/analytics');
 }
+
+export async function getMyOrders() {
+  return apiRequest('/orders/myorders');
+}
+
+export async function getOrderDetails(id) {
+  return apiRequest(`/orders/${id}`);
+}
+
+export async function deliverOrder(id) {
+  return apiRequest(`/orders/${id}/deliver`, { method: 'PUT' });
+}

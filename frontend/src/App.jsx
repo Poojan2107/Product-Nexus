@@ -14,6 +14,7 @@ import Cart from "./pages/Cart";
 import Shipping from "./pages/Shipping";
 import PlaceOrder from "./pages/PlaceOrder";
 import OrderList from "./pages/OrderList";
+import OrderDetails from "./pages/OrderDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import CommandTerminal from "./components/CommandTerminal";
@@ -113,6 +114,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <OrderList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/order/:id"
+            element={
+              <ProtectedRoute>
+                <OrderDetails />
               </ProtectedRoute>
             }
           />
