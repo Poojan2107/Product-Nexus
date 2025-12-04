@@ -29,6 +29,12 @@ const productSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  stock: {
+    type: Number,
+    required: true,
+    default: 0,
+    min: 0,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
