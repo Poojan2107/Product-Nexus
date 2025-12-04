@@ -9,6 +9,7 @@ import EditProduct from "./pages/EditProduct";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Shop from "./pages/Shop";
+import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -69,6 +70,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Shop />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shop/product/:id"
+            element={
+              <ProtectedRoute>
+                <ProductDetails />
               </ProtectedRoute>
             }
           />
