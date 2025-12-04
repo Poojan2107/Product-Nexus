@@ -38,6 +38,40 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
+// @desc    Get order analytics
+// @route   GET /api/orders/analytics
+// @access  Private/Admin
+router.get('/analytics', auth, admin, async (req, res) => {
+  const totalOrders = await Order.countDocuments();
+  
+  const revenue = await Order.aggregate([
+    {
+      $group: {
+        _id: null,
+        total: { $sum: '$totalPrice' },
+      },
+    },
+  ]);
+
+  const dailySales = await Order.aggregate([
+    {
+      $group: {
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+        sales: { $sum: '$totalPrice' },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { _id: 1 } },
+    { $limit: 7 }
+  ]);
+
+  res.json({
+    totalOrders,
+    totalRevenue: revenue[0]?.total || 0,
+    dailySales,
+  });
+});
+
 // @desc    Get order by ID
 // @route   GET /api/orders/:id
 // @access  Private

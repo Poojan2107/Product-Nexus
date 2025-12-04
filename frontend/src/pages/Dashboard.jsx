@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboardStats } from "../store/dashboardSlice";
+import { getAnalytics } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import { Bar, Pie, Line } from "react-chartjs-2";
 import { motion } from "framer-motion";
@@ -57,10 +58,14 @@ export default function Dashboard() {
   const dispatch = useDispatch();
   const { stats, loading, error } = useSelector((state) => state.dashboard);
   const { filters } = useSelector((state) => state.products);
+  const [orderStats, setOrderStats] = useState(null);
 
   useEffect(() => {
     if (user) {
       dispatch(getDashboardStats(filters));
+      if (user.role === 'admin') {
+        getAnalytics().then(setOrderStats).catch(console.error);
+      }
     }
   }, [dispatch, user, filters]);
 
@@ -70,12 +75,12 @@ export default function Dashboard() {
   const { totalProducts, totalValue, avgPrice, categoryCounts, priceRanges, products } = stats;
 
   const monochromeColors = [
-    "rgba(255, 255, 255, 1.0)",  // Solid White
-    "rgba(255, 255, 255, 0.8)",  // 80% White
-    "rgba(255, 255, 255, 0.6)",  // 60% White
-    "rgba(255, 255, 255, 0.4)",  // 40% White
-    "rgba(255, 255, 255, 0.2)",  // 20% White
-    "transparent"                // Wireframe (Border only)
+    "rgba(255, 255, 255, 1.0)",
+    "rgba(255, 255, 255, 0.8)",
+    "rgba(255, 255, 255, 0.6)",
+    "rgba(255, 255, 255, 0.4)",
+    "rgba(255, 255, 255, 0.2)",
+    "transparent"
   ];
 
   const categoryData = {
@@ -104,19 +109,20 @@ export default function Dashboard() {
     ],
   };
 
-  const priceLineData = {
-    labels: products.map((p) => p.name.substring(0, 10)),
+  const salesData = orderStats ? {
+    labels: orderStats.dailySales.map(d => d._id),
     datasets: [
       {
-        label: "Product Prices",
-        data: products.map((p) => Number(p.price)),
-        borderColor: "#ffffff",
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        label: "Daily Revenue (₹)",
+        data: orderStats.dailySales.map(d => d.sales),
+        borderColor: "#00ff41",
+        backgroundColor: "rgba(0, 255, 65, 0.1)",
         borderWidth: 2,
-        pointBackgroundColor: "#ffffff",
-      },
-    ],
-  };
+        tension: 0.4,
+        fill: true,
+      }
+    ]
+  } : null;
 
   return (
     <motion.div 
@@ -125,40 +131,55 @@ export default function Dashboard() {
       initial="hidden"
       animate="visible"
     >
-      <motion.h2 className="page-title" variants={itemVariants}>ANALYTICS_DASHBOARD.exe</motion.h2>
+      <motion.h2 className="page-title" variants={itemVariants}>COMMAND_CENTER_ANALYTICS</motion.h2>
       
+      {/* Order Stats (Revenue) */}
+      {orderStats && (
+        <motion.div className="stats stats-grid" variants={containerVariants} style={{ marginBottom: "2rem" }}>
+          <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--accent-primary)", background: "rgba(0, 255, 65, 0.05)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "0 0 20px rgba(0, 255, 65, 0.1)" }}>
+            <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px", color: "var(--accent-primary)" }}>TOTAL_REVENUE</h3>
+            <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "#fff" }}>₹{orderStats.totalRevenue.toFixed(2)}</p>
+          </motion.div>
+          <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
+            <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>TOTAL_ORDERS</h3>
+            <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--accent-secondary)" }}>{orderStats.totalOrders}</p>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Product Stats */}
       <motion.div className="stats stats-grid" variants={containerVariants}>
         <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
-          <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>TOTAL_PRODUCTS</h3>
-          <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--accent-primary)" }}>{totalProducts}</p>
+          <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>INVENTORY_SIZE</h3>
+          <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{totalProducts}</p>
         </motion.div>
         <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
-          <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>TOTAL_VALUE</h3>
-          <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--accent-primary)" }}>₹{totalValue.toFixed(2)}</p>
-        </motion.div>
-        <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
-          <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>AVERAGE_PRICE</h3>
-          <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--accent-primary)" }}>₹{avgPrice.toFixed(2)}</p>
+          <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>ASSET_VALUE</h3>
+          <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>₹{totalValue.toFixed(2)}</p>
         </motion.div>
       </motion.div>
 
       <motion.div className="charts charts-grid" variants={containerVariants}>
+        {/* Sales Chart */}
+        {salesData && (
+          <motion.div variants={itemVariants} className="chart-card chart-full-width" style={{ padding: "1rem", border: "2px solid var(--accent-primary)", background: "rgba(0,0,0,0.5)", borderRadius: "16px", boxShadow: "0 0 15px rgba(0, 255, 65, 0.1)", overflow: "hidden" }}>
+            <h3 style={{ color: "var(--accent-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>REVENUE_VELOCITY (7 DAYS)</h3>
+            <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
+              <Line data={salesData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: "rgba(255,255,255,0.1)" } }, x: { grid: { color: "rgba(255,255,255,0.1)" } } } }} />
+            </div>
+          </motion.div>
+        )}
+
         <motion.div variants={itemVariants} className="chart-card" style={{ padding: "1rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", borderRadius: "16px", boxShadow: "var(--shadow-secondary)", overflow: "hidden" }}>
-          <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>PRODUCTS_BY_CATEGORY</h3>
+          <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>ASSET_DISTRIBUTION</h3>
           <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
             <Pie data={categoryData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
           </div>
         </motion.div>
         <motion.div variants={itemVariants} className="chart-card" style={{ padding: "1rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", borderRadius: "16px", boxShadow: "var(--shadow-secondary)", overflow: "hidden" }}>
-          <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>PRICE_RANGES</h3>
+          <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>PRICE_SEGMENTS</h3>
           <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
             <Bar data={priceData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
-          </div>
-        </motion.div>
-        <motion.div variants={itemVariants} className="chart-card chart-full-width" style={{ padding: "1rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", borderRadius: "16px", boxShadow: "var(--shadow-secondary)", overflow: "hidden" }}>
-          <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>PRODUCT_PRICES</h3>
-          <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-            <Line data={priceLineData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
           </div>
         </motion.div>
       </motion.div>

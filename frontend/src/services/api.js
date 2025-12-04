@@ -134,3 +134,7 @@ export async function createOrder(order) {
 export async function getOrders() {
   return apiRequest('/orders');
 }
+
+export async function getAnalytics() {
+  return apiRequest('/orders/analytics');
+}
