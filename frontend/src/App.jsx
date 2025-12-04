@@ -8,6 +8,8 @@ import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import Shop from "./pages/Shop";
+import Cart from "./pages/Cart";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import CommandTerminal from "./components/CommandTerminal";
@@ -59,6 +61,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shop"
+            element={
+              <ProtectedRoute>
+                <Shop />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <Cart />
               </ProtectedRoute>
             }
           />

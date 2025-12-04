@@ -34,25 +34,38 @@ export default function Navbar() {
             {user && (
               <>
                 <NavLink
-                  to="/products"
+                  to="/shop"
                   className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}
                   onClick={closeMenu}
                 >
-                  PRODUCTS
+                  SHOP
                 </NavLink>
+                
+                {user.role === 'admin' && (
+                  <>
+                    <NavLink
+                      to="/products"
+                      className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}
+                      onClick={closeMenu}
+                    >
+                      INVENTORY
+                    </NavLink>
+                    <NavLink
+                      to="/dashboard"
+                      className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}
+                      onClick={closeMenu}
+                    >
+                      COMMAND
+                    </NavLink>
+                  </>
+                )}
+
                 <NavLink
-                  to="/products/add"
+                  to="/cart"
                   className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}
                   onClick={closeMenu}
                 >
-                  ADD_PRODUCT
-                </NavLink>
-                <NavLink
-                  to="/dashboard"
-                  className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}
-                  onClick={closeMenu}
-                >
-                  DASHBOARD
+                  CART
                 </NavLink>
               </>
             )}
