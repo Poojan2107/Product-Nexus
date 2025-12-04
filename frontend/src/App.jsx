@@ -11,6 +11,9 @@ import Profile from "./pages/Profile";
 import Shop from "./pages/Shop";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
+import Shipping from "./pages/Shipping";
+import PlaceOrder from "./pages/PlaceOrder";
+import OrderList from "./pages/OrderList";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import CommandTerminal from "./components/CommandTerminal";
@@ -86,6 +89,30 @@ function App() {
             element={
               <ProtectedRoute>
                 <Cart />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shipping"
+            element={
+              <ProtectedRoute>
+                <Shipping />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/placeorder"
+            element={
+              <ProtectedRoute>
+                <PlaceOrder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/orders"
+            element={
+              <ProtectedRoute>
+                <OrderList />
               </ProtectedRoute>
             }
           />

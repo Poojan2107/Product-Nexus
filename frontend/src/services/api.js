@@ -123,3 +123,14 @@ export async function updateUserProfile(userId, userData) {
     body: JSON.stringify(userData),
   });
 }
+
+export async function createOrder(order) {
+  return apiRequest('/orders', {
+    method: 'POST',
+    body: JSON.stringify(order),
+  });
+}
+
+export async function getOrders() {
+  return apiRequest('/orders');
+}

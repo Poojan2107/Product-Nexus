@@ -49,6 +49,7 @@ mongoose.connect(mongoUrl)
     // Routes (register after DB is ready)
     app.use('/api/auth', authRoutes);
     app.use('/api/products', productRoutes);
+    app.use('/api/orders', require('./routes/orders'));
 
     // Root route
     app.get('/', (req, res) => {

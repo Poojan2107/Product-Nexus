@@ -57,6 +57,13 @@ export default function Navbar() {
                     >
                       COMMAND
                     </NavLink>
+                    <NavLink
+                      to="/admin/orders"
+                      className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}
+                      onClick={closeMenu}
+                    >
+                      LOGS
+                    </NavLink>
                   </>
                 )}
 
