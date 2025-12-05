@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getOrderDetails, deliverOrder } from "../services/api";
+import { getOrderDetails, deliverOrder, payOrder } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import "../components/Card.css";
 
@@ -128,6 +128,23 @@ export default function OrderDetails() {
               onClick={deliverHandler}
             >
               MARK_AS_DELIVERED
+            </button>
+          )}
+
+          {!order.isPaid && user && user.role !== 'admin' && (
+            <button 
+              className="btn accent full-width" 
+              style={{ marginTop: "2rem", justifyContent: "center" }}
+              onClick={async () => {
+                try {
+                  await payOrder(order._id, { status: 'COMPLETED' });
+                  setOrder({ ...order, isPaid: true, paidAt: Date.now() });
+                } catch (err) {
+                  alert(err.message);
+                }
+              }}
+            >
+              [$$] INITIATE_CREDIT_TRANSFER
             </button>
           )}
         </div>

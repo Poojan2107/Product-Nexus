@@ -150,3 +150,10 @@ export async function getOrderDetails(id) {
 export async function deliverOrder(id) {
   return apiRequest(`/orders/${id}/deliver`, { method: 'PUT' });
 }
+
+export async function payOrder(id, paymentResult) {
+  return apiRequest(`/orders/${id}/pay`, {
+    method: 'PUT',
+    body: JSON.stringify(paymentResult),
+  });
+}

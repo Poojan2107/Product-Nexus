@@ -1,12 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const cartItemsFromStorage = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('cartItems'))
-  : [];
+const loadFromStorage = (key, defaultValue) => {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : defaultValue;
+  } catch (error) {
+    console.warn(`Error loading ${key} from localStorage:`, error);
+    return defaultValue;
+  }
+};
 
-const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
-  ? JSON.parse(localStorage.getItem('shippingAddress'))
-  : {};
+const cartItemsFromStorage = loadFromStorage('cartItems', []);
+const shippingAddressFromStorage = loadFromStorage('shippingAddress', {});
 
 const initialState = {
   cartItems: cartItemsFromStorage,
