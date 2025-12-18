@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getOrderDetails, deliverOrder, payOrder } from "../services/api";
+import { getOrderDetails, deliverOrder, createRazorpayOrder, verifyRazorpayPayment, getRazorpayKey } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import "../components/Card.css";
 
@@ -31,6 +31,53 @@ export default function OrderDetails() {
       setOrder({ ...order, isDelivered: true, status: 'Delivered', deliveredAt: Date.now() });
     } catch (err) {
       alert(err.message);
+    }
+  };
+
+  const payHandler = async () => {
+    try {
+      const { keyId } = await getRazorpayKey();
+      const orderData = await createRazorpayOrder(order._id);
+      
+      const options = {
+        key: keyId,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Product Nexus",
+        description: "Acquisition Payment",
+        image: "/favicon.svg",
+        order_id: orderData.id,
+        handler: async function (response) {
+          try {
+            const verifyData = {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              order_id: order._id
+            };
+            const result = await verifyRazorpayPayment(verifyData);
+            if (result.success) {
+              setOrder({ ...order, isPaid: true, paidAt: Date.now(), status: 'Processing' });
+              alert("PAYMENT_SUCCESSFUL");
+            }
+          } catch (err) {
+            alert("PAYMENT_VERIFICATION_FAILED: " + err.message);
+          }
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+        },
+        theme: {
+          color: "#00ff41"
+        }
+      };
+      
+      const rzp1 = new window.Razorpay(options);
+      rzp1.open();
+      
+    } catch (err) {
+      alert("PAYMENT_INITIATION_FAILED: " + err.message);
     }
   };
 
@@ -73,7 +120,7 @@ export default function OrderDetails() {
               </div>
             ) : (
               <div style={{ background: "rgba(255, 51, 51, 0.1)", color: "#ff3333", padding: "1rem", borderRadius: "4px" }}>
-                STATUS: PAYMENT_PENDING (MOCK)
+                STATUS: PAYMENT_PENDING (Razorpay)
               </div>
             )}
           </div>
@@ -135,14 +182,7 @@ export default function OrderDetails() {
             <button 
               className="btn accent full-width" 
               style={{ marginTop: "2rem", justifyContent: "center" }}
-              onClick={async () => {
-                try {
-                  await payOrder(order._id, { status: 'COMPLETED' });
-                  setOrder({ ...order, isPaid: true, paidAt: Date.now() });
-                } catch (err) {
-                  alert(err.message);
-                }
-              }}
+              onClick={payHandler}
             >
               [$$] INITIATE_CREDIT_TRANSFER
             </button>

@@ -157,3 +157,21 @@ export async function payOrder(id, paymentResult) {
     body: JSON.stringify(paymentResult),
   });
 }
+
+export async function createRazorpayOrder(orderId) {
+  return apiRequest('/payment/create-order', {
+    method: 'POST',
+    body: JSON.stringify({ orderId }),
+  });
+}
+
+export async function verifyRazorpayPayment(paymentData) {
+  return apiRequest('/payment/verify-payment', {
+    method: 'POST',
+    body: JSON.stringify(paymentData),
+  });
+}
+
+export async function getRazorpayKey() {
+  return apiRequest('/payment/key');
+}
