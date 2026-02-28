@@ -62,8 +62,8 @@ export default function Register() {
           }}>
             <UserPlus size={24} />
           </div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', letterSpacing: '-0.025em', color: 'var(--text-primary)' }}>
-            Request Access
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', letterSpacing: '-0.025em', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            ProductNexus
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.5rem' }}>
             Create a new administrator account
@@ -133,6 +133,11 @@ export default function Register() {
         <p style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
           Already have an account? <Link to="/login" style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Sign in</Link>
         </p>
+
+        <div style={{ marginTop: '2.5rem', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.65rem', fontWeight: '600', color: 'var(--text-muted)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Built & Engineered By</p>
+          <span style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--success-color)', fontFamily: 'var(--font-mono)' }}>POOJAN 😎</span>
+        </div>
       </div>
     </div>
   );

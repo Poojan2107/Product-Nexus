@@ -47,8 +47,8 @@ export default function Sidebar({ isOpen, onClose }) {
           alignItems: 'center',
           gap: '0.5rem'
         }}>
-          <div style={{ width: '24px', height: '24px', backgroundColor: 'var(--accent-color)', borderRadius: '4px' }}></div>
-          Nexus OS
+          <div style={{ width: '24px', height: '24px', backgroundColor: 'var(--accent-color)', borderRadius: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--bg-primary)', fontWeight: 'bold', fontSize: '14px' }}>P</div>
+          ProductNexus
         </h1>
         {isMobile && (
           <button onClick={onClose} style={{ color: 'var(--text-secondary)' }}>
@@ -96,7 +96,13 @@ export default function Sidebar({ isOpen, onClose }) {
         </ul>
       </nav>
 
-      <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem', marginTop: 'auto' }}>
+      <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ padding: '0 0.5rem', marginBottom: '0.5rem' }}>
+          <p style={{ fontSize: '0.65rem', fontWeight: '600', color: 'var(--text-muted)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Built & Engineered By</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+             <span style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--success-color)', fontFamily: 'var(--font-mono)' }}>POOJAN 😎</span>
+          </div>
+        </div>
         <button 
           onClick={logout}
           style={{
