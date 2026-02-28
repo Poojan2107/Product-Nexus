@@ -1,4 +1,6 @@
 import { createContext, useContext, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, AlertCircle, X } from "lucide-react";
 
 const NotificationContext = createContext();
 
@@ -31,50 +33,52 @@ export function NotificationProvider({ children }) {
   return (
     <NotificationContext.Provider value={{ addNotification, removeNotification }}>
       {children}
-      <div className="notifications" style={{ position: "fixed", top: "20px", right: "20px", zIndex: 1000 }}>
-        {notifications.map((n) => (
-          <div
-            key={n.id}
-            className={`notification ${n.type}`}
-            style={{
-              background: n.type === "success" ? "#4caf50" : "#f44336",
-              color: "white",
-              padding: "1rem",
-              marginBottom: "0.5rem",
-              borderRadius: "4px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-              cursor: "pointer",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.9rem",
-              textTransform: "none",
-              letterSpacing: "0",
-            }}
-            onClick={() => removeNotification(n.id)}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <span>{n.message}</span>
-              {n.actionLabel && (
-                <button
-                  style={{
-                    background: "rgba(255,255,255,0.2)",
-                    color: "#fff",
-                    border: "1px solid rgba(255,255,255,0.4)",
-                    padding: "0.25rem 0.5rem",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (typeof n.onAction === "function") n.onAction(n);
-                    removeNotification(n.id);
-                  }}
-                >
-                  {n.actionLabel}
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
+      <div style={{ position: "fixed", bottom: "24px", right: "24px", zIndex: 1000, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <AnimatePresence>
+          {notifications.map((n) => (
+            <motion.div
+              key={n.id}
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+              style={{
+                background: "var(--bg-secondary)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-primary)",
+                padding: "1rem 1.25rem",
+                borderRadius: "var(--radius-sm)",
+                boxShadow: "var(--shadow-lg)",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.875rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+                minWidth: "300px",
+                overflow: "hidden",
+                position: "relative"
+              }}
+            >
+              <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "4px", backgroundColor: n.type === "success" ? "var(--success-color)" : "var(--danger-color)" }} />
+              
+              <div style={{ color: n.type === "success" ? "var(--success-color)" : "var(--danger-color)" }}>
+                {n.type === "success" ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
+              </div>
+              
+              <div style={{ flex: 1 }}>
+                <span style={{ fontWeight: '500' }}>{n.message}</span>
+              </div>
+              
+              <button 
+                onClick={() => removeNotification(n.id)}
+                style={{ color: "var(--text-muted)", padding: "0.25rem", borderRadius: "4px" }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--bg-tertiary)"}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+              >
+                <X size={16} />
+              </button>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </NotificationContext.Provider>
   );

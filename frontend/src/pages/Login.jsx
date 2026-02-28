@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import "./Form.css";
+import { LogIn } from "lucide-react";
 
 export default function Login() {
   const { loginWithEmail, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/products";
+  const from = location.state?.from?.pathname || "/";
+  
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ export default function Login() {
     e.preventDefault();
     setError("");
     if (!form.email || !form.password) {
-      setError("EMAIL AND PASSWORD REQUIRED");
+      setError("Email and password are required.");
       return;
     }
     try {
@@ -34,45 +35,99 @@ export default function Login() {
       await loginWithEmail(form.email, form.password);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Failed to log in.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="form-card matrix">
-      <h2 className="form-title">USER_LOGIN.exe</h2>
-      {error && <div className="form-error">{error}</div>}
-      <form onSubmit={handleSubmit} className="form">
-        <label>
-          <span>EMAIL_ADDRESS</span>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="user@example.com"
-          />
-        </label>
-        <label>
-          <span>PASSWORD</span>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="••••••••"
-          />
-        </label>
-        <button className="btn accent" disabled={loading} type="submit">
-          {loading ? "AUTHENTICATING..." : "SIGN_IN"}
-        </button>
-      </form>
-      {/* Google sign-in removed for local-only mode */}
-      <p className="form-foot">
-        NO_ACCOUNT? <Link to="/register">REGISTER_HERE</Link>
-      </p>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'var(--bg-primary)',
+      padding: '2rem'
+    }}>
+      <div className="card animate-fade-in" style={{
+        maxWidth: '400px',
+        width: '100%',
+        padding: '2.5rem 2rem'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ 
+            width: '48px', height: '48px', backgroundColor: 'var(--accent-color)', 
+            borderRadius: '12px', margin: '0 auto 1.5rem auto',
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            color: 'var(--bg-primary)'
+          }}>
+            <LogIn size={24} />
+          </div>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', letterSpacing: '-0.025em', color: 'var(--text-primary)' }}>
+            Welcome back
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+            Enter your credentials to access the console
+          </p>
+        </div>
+
+        {error && (
+          <div style={{
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            color: 'var(--danger-color)',
+            padding: '0.75rem',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '0.875rem',
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            border: '1px solid rgba(239, 68, 68, 0.2)'
+          }}>
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div>
+            <label className="label">Email Address</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="admin@nexus.com"
+              className="input"
+            />
+          </div>
+          <div>
+            <label className="label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+              Password
+              <a href="#" style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Forgot?</a>
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="••••••••"
+              className="input"
+            />
+          </div>
+          
+          <button 
+            type="submit" 
+            className="btn btn-primary" 
+            style={{ width: '100%', marginTop: '0.5rem', padding: '0.75rem' }}
+            disabled={loading}
+          >
+            {loading ? "Authenticating..." : "Sign In"}
+          </button>
+        </form>
+
+        <p style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          Don't have an account? <Link to="/register" style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Request access</Link>
+        </p>
+      </div>
     </div>
   );
 }

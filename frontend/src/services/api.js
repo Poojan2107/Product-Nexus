@@ -124,54 +124,7 @@ export async function updateUserProfile(userId, userData) {
   });
 }
 
-export async function createOrder(order) {
-  return apiRequest('/orders', {
-    method: 'POST',
-    body: JSON.stringify(order),
-  });
+export async function getActivities(limit = 10) {
+  return apiRequest(`/activities?limit=${limit}`);
 }
 
-export async function getOrders() {
-  return apiRequest('/orders');
-}
-
-export async function getAnalytics() {
-  return apiRequest('/orders/analytics');
-}
-
-export async function getMyOrders() {
-  return apiRequest('/orders/myorders');
-}
-
-export async function getOrderDetails(id) {
-  return apiRequest(`/orders/${id}`);
-}
-
-export async function deliverOrder(id) {
-  return apiRequest(`/orders/${id}/deliver`, { method: 'PUT' });
-}
-
-export async function payOrder(id, paymentResult) {
-  return apiRequest(`/orders/${id}/pay`, {
-    method: 'PUT',
-    body: JSON.stringify(paymentResult),
-  });
-}
-
-export async function createRazorpayOrder(orderId) {
-  return apiRequest('/payment/create-order', {
-    method: 'POST',
-    body: JSON.stringify({ orderId }),
-  });
-}
-
-export async function verifyRazorpayPayment(paymentData) {
-  return apiRequest('/payment/verify-payment', {
-    method: 'POST',
-    body: JSON.stringify(paymentData),
-  });
-}
-
-export async function getRazorpayKey() {
-  return apiRequest('/payment/key');
-}

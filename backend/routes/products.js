@@ -1,5 +1,6 @@
 const express = require('express');
 const Product = require('../models/Product');
+const ActivityLog = require('../models/ActivityLog');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
@@ -112,6 +113,15 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
     });
 
     await product.save();
+    
+    // Log activity
+    await ActivityLog.create({
+      user: req.user.id,
+      action: 'CREATE',
+      entityName: product.name,
+      details: `Added new asset: ${product.name} ($${product.price})`
+    });
+
     res.json(product);
   } catch (err) {
     console.error("Error creating product:", err);
@@ -160,6 +170,14 @@ router.put('/:id', auth, upload.single('image'), async (req, res) => {
       { new: true }
     );
 
+    // Log activity
+    await ActivityLog.create({
+      user: req.user.id,
+      action: 'UPDATE',
+      entityName: product.name,
+      details: `Updated asset details: ${product.name}`
+    });
+
     res.json(product);
   } catch (err) {
     console.error(err.message);
@@ -185,6 +203,14 @@ router.delete('/:id', auth, async (req, res) => {
     }
 
     await Product.findByIdAndDelete(req.params.id);
+
+    // Log activity
+    await ActivityLog.create({
+      user: req.user.id,
+      action: 'DELETE',
+      entityName: product.name,
+      details: `Deleted asset: ${product.name}`
+    });
 
     res.json({ message: 'Product removed' });
   } catch (err) {

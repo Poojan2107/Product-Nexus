@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
+const activityRoutes = require('./routes/activities');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -49,8 +50,7 @@ mongoose.connect(mongoUrl)
     // Routes (register after DB is ready)
     app.use('/api/auth', authRoutes);
     app.use('/api/products', productRoutes);
-    app.use('/api/orders', require('./routes/orders'));
-    app.use('/api/payment', require('./routes/payment'));
+    app.use('/api/activities', activityRoutes);
 
     // Root route
     app.get('/', (req, res) => {

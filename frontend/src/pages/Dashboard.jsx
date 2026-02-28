@@ -1,188 +1,167 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDashboardStats } from "../store/dashboardSlice";
-import { getAnalytics } from "../services/api";
-import { useAuth } from "../hooks/useAuth";
-import { Bar, Pie, Line } from "react-chartjs-2";
-import { motion } from "framer-motion";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  PointElement,
-  LineElement,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  PointElement,
-  LineElement,
-);
-
-// Animation Variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100
-    }
-  }
-};
+import { getProducts } from "../store/productSlice";
+import { TrendingUp, Package, DollarSign, Activity, ArrowUpRight, ArrowDownRight, Edit2, Trash2, PlusCircle, Download } from "lucide-react";
+import { getActivities } from "../services/api";
+import InventoryChart from "../components/InventoryChart";
+import { exportToCSV } from "../utils/exportToCSV";
 
 export default function Dashboard() {
-  const { user } = useAuth();
   const dispatch = useDispatch();
-  const { stats, loading, error } = useSelector((state) => state.dashboard);
-  const { filters } = useSelector((state) => state.products);
-  const [orderStats, setOrderStats] = useState(null);
+  const { items: products, loading } = useSelector((state) => state.products);
+
+  const [activities, setActivities] = useState([]);
 
   useEffect(() => {
-    if (user) {
-      dispatch(getDashboardStats(filters));
-      if (user.role === 'admin') {
-        getAnalytics().then(setOrderStats).catch(console.error);
+    const fetchData = async () => {
+      dispatch(getProducts({ page: 1, limit: 1000 }));
+      try {
+        const data = await getActivities(6);
+        setActivities(data);
+      } catch (err) {
+        console.error("Failed to fetch activities");
       }
-    }
-  }, [dispatch, user, filters]);
+    };
+    fetchData();
+    document.addEventListener('assets-updated', fetchData);
+    return () => document.removeEventListener('assets-updated', fetchData);
+  }, [dispatch]);
 
-  if (loading) return <div className="loading">LOADING_DASHBOARD...</div>;
-  if (error) return <div className="container terminal">{error}</div>;
+  const totalValue = products.reduce((sum, p) => sum + Number(p.price), 0);
+  const totalItems = products.length;
 
-  const { totalProducts, totalValue, avgPrice, categoryCounts, priceRanges, products } = stats;
-
-  const monochromeColors = [
-    "rgba(255, 255, 255, 1.0)",
-    "rgba(255, 255, 255, 0.8)",
-    "rgba(255, 255, 255, 0.6)",
-    "rgba(255, 255, 255, 0.4)",
-    "rgba(255, 255, 255, 0.2)",
-    "transparent"
+  const stats = [
+    { title: "Total Revenue", value: `$${totalValue.toLocaleString()}`, change: "+14.5%", isPositive: true, icon: <DollarSign size={20} /> },
+    { title: "Active Inventory", value: totalItems.toLocaleString(), change: "+2.3%", isPositive: true, icon: <Package size={20} /> },
+    { title: "System Health", value: "99.9%", change: "Stable", isPositive: true, icon: <Activity size={20} /> },
+    { title: "Monthly Growth", value: "24.1%", change: "-1.2%", isPositive: false, icon: <TrendingUp size={20} /> },
   ];
 
-  const categoryData = {
-    labels: Object.keys(categoryCounts),
-    datasets: [
-      {
-        label: "Products per Category",
-        data: Object.values(categoryCounts),
-        backgroundColor: monochromeColors,
-        borderColor: "#ffffff",
-        borderWidth: 1,
-      },
-    ],
-  };
+  if (loading) {
+    return (
+      <div className="page-container animate-fade-in">
+        <div className="page-header">
+          <div className="skeleton" style={{ height: '40px', width: '250px', marginBottom: '0.5rem' }} />
+          <div className="skeleton" style={{ height: '20px', width: '300px' }} />
+        </div>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+          {[1,2,3,4].map(i => (
+            <div key={i} className="card skeleton" style={{ height: '120px' }} />
+          ))}
+        </div>
 
-  const priceData = {
-    labels: Object.keys(priceRanges),
-    datasets: [
-      {
-        label: "Products in Price Range",
-        data: Object.values(priceRanges),
-        backgroundColor: "#d4d4d4",
-        borderColor: "#ffffff",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const salesData = orderStats ? {
-    labels: orderStats.dailySales.map(d => d._id),
-    datasets: [
-      {
-        label: "Daily Revenue (₹)",
-        data: orderStats.dailySales.map(d => d.sales),
-        borderColor: "#00ff41",
-        backgroundColor: "rgba(0, 255, 65, 0.1)",
-        borderWidth: 2,
-        tension: 0.4,
-        fill: true,
-      }
-    ]
-  } : null;
+        <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+          <div className="card skeleton" style={{ minHeight: '400px' }} />
+          <div className="card skeleton" style={{ minHeight: '400px' }} />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <motion.div 
-      className="container"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.h2 className="page-title" variants={itemVariants}>COMMAND_CENTER_ANALYTICS</motion.h2>
-      
-      {/* Order Stats (Revenue) */}
-      {orderStats && (
-        <motion.div className="stats stats-grid" variants={containerVariants} style={{ marginBottom: "2rem" }}>
-          <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--accent-primary)", background: "rgba(0, 255, 65, 0.05)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "0 0 20px rgba(0, 255, 65, 0.1)" }}>
-            <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px", color: "var(--accent-primary)" }}>TOTAL_REVENUE</h3>
-            <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "#fff" }}>₹{orderStats.totalRevenue.toFixed(2)}</p>
-          </motion.div>
-          <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
-            <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>TOTAL_ORDERS</h3>
-            <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--accent-secondary)" }}>{orderStats.totalOrders}</p>
-          </motion.div>
-        </motion.div>
-      )}
+    <div className="page-container animate-fade-in">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Overview</h1>
+          <p className="page-subtitle">Real-time inventory and system metrics.</p>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button className="btn btn-secondary" onClick={() => exportToCSV(products)}>
+            <Download size={16} /> Download Report
+          </button>
+          <button className="btn btn-primary" onClick={() => dispatch(getProducts({ page: 1, limit: 1000 }))}>
+            Sync Database
+          </button>
+        </div>
+      </div>
 
-      {/* Product Stats */}
-      <motion.div className="stats stats-grid" variants={containerVariants}>
-        <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
-          <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>INVENTORY_SIZE</h3>
-          <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>{totalProducts}</p>
-        </motion.div>
-        <motion.div variants={itemVariants} className="stat-card" style={{ padding: "1.5rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", color: "var(--text-primary)", borderRadius: "16px", textAlign: "center", boxShadow: "var(--shadow-secondary)" }}>
-          <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>ASSET_VALUE</h3>
-          <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0, fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>₹{totalValue.toFixed(2)}</p>
-        </motion.div>
-      </motion.div>
-
-      <motion.div className="charts charts-grid" variants={containerVariants}>
-        {/* Sales Chart */}
-        {salesData && (
-          <motion.div variants={itemVariants} className="chart-card chart-full-width" style={{ padding: "1rem", border: "2px solid var(--accent-primary)", background: "rgba(0,0,0,0.5)", borderRadius: "16px", boxShadow: "0 0 15px rgba(0, 255, 65, 0.1)", overflow: "hidden" }}>
-            <h3 style={{ color: "var(--accent-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>REVENUE_VELOCITY (7 DAYS)</h3>
-            <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-              <Line data={salesData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: "rgba(255,255,255,0.1)" } }, x: { grid: { color: "rgba(255,255,255,0.1)" } } } }} />
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+        gap: '1.5rem',
+        marginBottom: '2rem'
+      }}>
+        {stats.map((stat, idx) => (
+          <div key={idx} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: '500' }}>
+                {stat.title}
+              </span>
+              <div style={{ padding: '0.5rem', backgroundColor: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)', color: 'var(--text-primary)' }}>
+                {stat.icon}
+              </div>
             </div>
-          </motion.div>
-        )}
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
+              <span style={{ fontSize: '2rem', fontWeight: '700', color: 'var(--text-primary)', letterSpacing: '-0.025em' }}>
+                {stat.value}
+              </span>
+              <span style={{ 
+                display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', fontWeight: '500',
+                color: stat.isPositive ? 'var(--success-color)' : 'var(--danger-color)',
+                backgroundColor: stat.isPositive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                padding: '0.25rem 0.5rem', borderRadius: '4px'
+              }}>
+                {stat.isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                {stat.change}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
 
-        <motion.div variants={itemVariants} className="chart-card" style={{ padding: "1rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", borderRadius: "16px", boxShadow: "var(--shadow-secondary)", overflow: "hidden" }}>
-          <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>ASSET_DISTRIBUTION</h3>
-          <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-            <Pie data={categoryData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
+      <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+        <div className="card" style={{ minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: 'var(--text-primary)' }}>Asset Valuation Trend</h3>
+            <select className="input" style={{ width: 'auto', padding: '0.5rem 2rem 0.5rem 1rem', fontSize: '0.875rem', cursor: 'pointer' }}>
+              <option>Last 7 Days</option>
+              <option>Last 30 Days</option>
+              <option>All Time</option>
+            </select>
           </div>
-        </motion.div>
-        <motion.div variants={itemVariants} className="chart-card" style={{ padding: "1rem", border: "2px solid var(--border-primary)", background: "var(--bg-card)", borderRadius: "16px", boxShadow: "var(--shadow-secondary)", overflow: "hidden" }}>
-          <h3 style={{ color: "var(--text-primary)", textAlign: "center", marginBottom: "1rem", fontSize: "1.5rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "1px" }}>PRICE_SEGMENTS</h3>
-          <div style={{ height: "300px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-            <Bar data={priceData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
+          <div style={{ flex: 1, backgroundColor: 'var(--bg-primary)', borderRadius: 'var(--radius-md)' }}>
+            <InventoryChart />
           </div>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+        </div>
+
+        {/* Recent Activity Panel */}
+        <div className="card">
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>
+            Recent Activity
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {activities.length > 0 ? activities.map((log, i) => (
+              <div key={log._id} style={{ display: 'flex', gap: '1rem', paddingBottom: '1rem', borderBottom: i < activities.length - 1 ? '1px solid var(--border-color)' : 'none' }}>
+                <div style={{ 
+                  width: '40px', height: '40px', borderRadius: '50%', 
+                  backgroundColor: log.action === 'CREATE' ? 'rgba(16, 185, 129, 0.1)' : log.action === 'DELETE' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+                  display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0, 
+                  color: log.action === 'CREATE' ? 'var(--success-color)' : log.action === 'DELETE' ? 'var(--danger-color)' : '#3b82f6'
+                }}>
+                  {log.action === 'CREATE' ? <PlusCircle size={18} /> : log.action === 'DELETE' ? <Trash2 size={18} /> : <Edit2 size={18} />}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ color: 'var(--text-primary)', fontSize: '0.875rem', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {log.details}
+                  </p>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                    {new Date(log.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            )) : (
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', textAlign: 'center', padding: '2rem 0' }}>No recent activity found.</p>
+            )}
+          </div>
+          
+          {activities.length > 0 && (
+            <button className="btn" style={{ width: '100%', marginTop: '1.5rem', color: 'var(--text-secondary)' }}>
+              View All Activity
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
