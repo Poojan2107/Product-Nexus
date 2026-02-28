@@ -1,8 +1,12 @@
 import { Search, Bell, Plus, User, Menu } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { useNotification } from "../contexts/NotificationContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Topbar({ onPlusClick, onMenuToggle }) {
   const { user } = useAuth();
+  const { addNotification } = useNotification();
+  const navigate = useNavigate();
   
   const getInitials = (name) => {
     if (!name) return "U";
@@ -52,6 +56,7 @@ export default function Topbar({ onPlusClick, onMenuToggle }) {
           borderRadius: '50%',
           transition: 'background-color var(--transition-fast)'
         }}
+        onClick={() => addNotification('System nominal. No unread alerts.', 'success')}
         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
         >
@@ -67,7 +72,9 @@ export default function Topbar({ onPlusClick, onMenuToggle }) {
           }}></span>
         </button>
         
-        <div style={{ 
+        <button 
+          onClick={() => navigate('/settings')}
+          style={{ 
           width: '32px', 
           height: '32px', 
           borderRadius: '50%', 
@@ -78,10 +85,12 @@ export default function Topbar({ onPlusClick, onMenuToggle }) {
           alignItems: 'center',
           color: 'var(--text-primary)',
           fontWeight: '600',
-          fontSize: '0.875rem'
+          fontSize: '0.875rem',
+          cursor: 'pointer',
+          padding: 0
         }}>
           {user ? getInitials(user.name) : <User size={16} />}
-        </div>
+        </button>
       </div>
     </header>
   );
