@@ -34,14 +34,14 @@ export default function Analytics() {
   }, []);
 
   const categoryData = [
-    products.filter(p => (p.category || '').toLowerCase().includes('kitchen')).length || 10,
-    products.filter(p => (p.category || '').toLowerCase().includes('fitness')).length || 8,
-    products.filter(p => (p.category || '').toLowerCase().includes('wellness')).length || 5,
-    products.filter(p => (p.category || '').toLowerCase().includes('entertainment')).length || 15
+    products.filter(p => (p.name || '').toLowerCase().includes('mac') || (p.name || '').toLowerCase().includes('laptop') || (p.name || '').toLowerCase().includes('pc')).length || 12,
+    products.filter(p => (p.name || '').toLowerCase().includes('display') || (p.name || '').toLowerCase().includes('monitor')).length || 8,
+    products.filter(p => (p.name || '').toLowerCase().includes('server') || (p.name || '').toLowerCase().includes('router') || (p.category || '').toLowerCase().includes('network')).length || 5,
+    products.filter(p => (p.name || '').toLowerCase().includes('mouse') || (p.name || '').toLowerCase().includes('keyboard')).length || 15
   ];
 
   const doughnutData = {
-    labels: ['Kitchen Appliances', 'Fitness Gear', 'Wellness', 'Entertainment'],
+    labels: ['Laptops/PCs', 'Monitors', 'Networking/Servers', 'Peripherals'],
     datasets: [
       {
         data: categoryData,
