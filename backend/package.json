@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon --quiet server.js"
+    "dev": "nodemon --quiet server.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "axios": "^1.13.2",
@@ -23,6 +24,8 @@
     "razorpay": "^2.9.6"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2",
+    "vitest": "^4.0.18"
   }
 }

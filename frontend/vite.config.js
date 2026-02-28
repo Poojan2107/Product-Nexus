@@ -8,5 +8,11 @@ export default defineConfig({
   logLevel: 'info', // 'warn' hides the local url which we want
   server: {
     open: true,
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.js',
+    css: true,
   }
 });
